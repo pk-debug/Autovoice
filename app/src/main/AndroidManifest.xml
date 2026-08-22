@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      android.hardware.type.automotive, required="false":
+      Declaring the automotive feature (even as optional) is what makes this
+      app ELIGIBLE for distribution to Android Automotive OS devices via
+      Google Play at all — but required="false" keeps it installable on a
+      normal phone too, matching the "Car ready mobile apps program" model
+      described in Android's AAOS developer docs, and satisfying the
+      "Meet Google Play feature requirements" checklist from the platform
+      docs (leaving this required="true" would BLOCK distribution to any
+      device that isn't a car).
+    -->
+    <uses-feature
+        android:name="android.hardware.type.automotive"
+        android:required="false" />
+
+    <!-- Per the same checklist, screen-orientation features must be
+         explicitly relaxed — cars ship in both portrait and landscape,
+         and an implicit orientation requirement from a dependency would
+         silently block distribution to whichever orientation isn't
+         declared. -->
+    <uses-feature
+        android:name="android.hardware.screen.portrait"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.screen.landscape"
+        android:required="false" />
+
+    <application
+        android:name=".AutoVoiceApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.AutoVoiceOS"
+        tools:targetApi="35">
+
+        <!--
+          MainActivity — the Compose-drawn, custom head-unit dashboard.
+          distractionOptimized="true" is what tells AAOS's UX Restrictions
+          Engine this specific activity may remain visible/usable while the
+          car is in motion. This flag must NEVER appear on any other
+          <activity> in this manifest (see the platform docs' explicit
+          Play Store rejection warning, and MainActivity.kt's KDoc).
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="unspecified">
+            <meta-data
+                android:name="distractionOptimized"
+                android:value="true" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          Car App Library entry point — the Android Auto / AAOS "template"
+          surface described in car/AutoVoiceCarAppService.kt. The
+          androidx.car.app.minCarApiLevel meta-data on <application> and the
+          category declaration below are both required by the Car App
+          Library; omitting either causes the host to silently refuse to
+          bind to this service.
+        -->
+        <meta-data
+            android:name="androidx.car.app.minCarApiLevel"
+            android:value="1" />
+
+        <service
+            android:name=".car.AutoVoiceCarAppService"
+            android:exported="true"
+            android:foregroundServiceType="mediaProjection">
+            <intent-filter>
+                <action android:name="androidx.car.app.CarAppService" />
+                <category android:name="androidx.car.app.category.IOT" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>
