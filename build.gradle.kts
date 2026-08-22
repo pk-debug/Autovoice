@@ -11,7 +11,8 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.kotlin.ksp) apply false
-    alias(libs.plugins.hilt.android) apply false
+    alias(libs.plugins.kotlinAndroidPlugin) apply false
+    alias(libs.plugins.kotlinComposePlugin) apply false
+    alias(libs.plugins.kspPlugin) apply false
+    alias(libs.plugins.hiltPlugin) apply false
 }
