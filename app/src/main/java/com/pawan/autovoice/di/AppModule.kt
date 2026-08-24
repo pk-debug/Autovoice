@@ -13,6 +13,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import com.pawan.voicesdk.stt.AndroidSpeechToTextEngine
+import com.pawan.voicesdk.stt.SpeechToTextEngine
+import com.pawan.voicesdk.tts.AndroidTextToSpeechEngine
+import com.pawan.voicesdk.tts.TextToSpeechEngine
 
 /**
  * ## AppModule
@@ -43,6 +47,18 @@ public object AppModule {
     public fun provideVoiceAudioFocusManager(
         @ApplicationContext context: Context,
     ): VoiceAudioFocusManager = VoiceAudioFocusManager(context)
+
+    @Provides
+    @Singleton
+    public fun provideSpeechToTextEngine(
+        @ApplicationContext context: Context,
+    ): SpeechToTextEngine = AndroidSpeechToTextEngine(context)
+
+    @Provides
+    @Singleton
+    public fun provideTextToSpeechEngine(
+        @ApplicationContext context: Context,
+    ): TextToSpeechEngine = AndroidTextToSpeechEngine(context)
 }
 
 /**

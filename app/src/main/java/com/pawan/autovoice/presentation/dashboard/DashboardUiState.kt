@@ -70,6 +70,8 @@ public data class MediaUiState(
 public sealed interface DashboardIntent {
     /** Driver tapped the voice orb / pressed the steering-wheel voice button. */
     public data class SimulateVoiceCommand(val utterance: String) : DashboardIntent
+    /** Driver taps the orb to START a real listening session (replaces SimulateVoiceCommand). */
+    public data object StartListening : DashboardIntent
     public data object ToggleMediaPlayback : DashboardIntent
     public data class MediaControlRequested(val action: MediaAction) : DashboardIntent
     public data object ErrorMessageShown : DashboardIntent
