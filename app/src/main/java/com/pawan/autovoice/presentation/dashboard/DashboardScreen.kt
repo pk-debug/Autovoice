@@ -91,7 +91,10 @@ internal fun DashboardContent(uiState: DashboardUiState, onIntent: (DashboardInt
             Box(modifier = Modifier.padding(start = CarDimens.MinTouchTargetSpacing), contentAlignment = Alignment.Center) {
                 VoiceOrb(
                     sessionState = uiState.voiceSessionState,
-                    onTap = { onIntent(DashboardIntent.SimulateVoiceCommand(utterance = "turn on the ac to 22")) },
+                    onTap = {
+//                        onIntent(DashboardIntent.SimulateVoiceCommand(utterance = "turn on the ac to 22"))
+                        onIntent(DashboardIntent.StartListening)
+                    },
                 )
             }
         }

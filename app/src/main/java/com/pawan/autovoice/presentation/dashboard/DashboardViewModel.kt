@@ -42,7 +42,7 @@ import javax.inject.Inject
  *   forget.
  */
 @HiltViewModel
-public class DashboardViewModel @Inject constructor(
+class DashboardViewModel @Inject constructor(
     private val processVoiceCommand: ProcessVoiceCommandUseCase,
     private val speechToTextEngine: SpeechToTextEngine,
     private val textToSpeechEngine: TextToSpeechEngine,
