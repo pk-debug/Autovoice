@@ -2,6 +2,7 @@ package com.pawan.autovoice.presentation.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pawan.autovoice.domain.model.VoiceInteraction
 import com.pawan.autovoice.domain.model.VoiceFailureReason
 import com.pawan.autovoice.domain.model.VoiceOutcome
 import com.pawan.autovoice.domain.usecase.ProcessVoiceCommandUseCase
@@ -97,6 +98,16 @@ class DashboardViewModel @Inject constructor(
         val spokenResponse = when (val outcome = processVoiceCommand(utterance = utterance)) {
             is VoiceOutcome.Understood -> applyCommand(outcome.command)
             is VoiceOutcome.NotUnderstood -> applyFailure(outcome.reason)
+        }
+
+        // Record history
+        _uiState.update { current ->
+            current.copy(
+                voiceHistory = current.voiceHistory + VoiceInteraction(
+                    utterance = utterance,
+                    response = spokenResponse
+                )
+            )
         }
 
         speakResult(spokenResponse)

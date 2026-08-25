@@ -1,5 +1,6 @@
 package com.pawan.autovoice.presentation.dashboard
 
+import com.pawan.autovoice.domain.model.VoiceInteraction
 import com.pawan.voicesdk.model.MediaAction
 
 /**
@@ -22,6 +23,7 @@ import com.pawan.voicesdk.model.MediaAction
  *   updated only when a [com.pawan.voicesdk.model.VoiceCommand.ClimateControl]
  *   comes back from the SDK, or the driver taps the widget directly.
  * @property nowPlaying current media-playback display state.
+ * @property voiceHistory a list of recent [VoiceInteraction]s to display.
  * @property errorMessage a one-shot, human-readable error string to surface
  *   (e.g. in a Snackbar). Modeled as nullable state rather than a
  *   [kotlinx.coroutines.flow.SharedFlow] event for simplicity in this
@@ -33,6 +35,7 @@ public data class DashboardUiState(
     val voiceSessionState: VoiceSessionState = VoiceSessionState.Idle,
     val climateState: ClimateUiState = ClimateUiState(),
     val nowPlaying: MediaUiState = MediaUiState(),
+    val voiceHistory: List<VoiceInteraction> = emptyList(),
     val errorMessage: String? = null,
 )
 

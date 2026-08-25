@@ -1,9 +1,14 @@
 package com.pawan.autovoice.presentation.dashboard
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -21,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pawan.autovoice.presentation.components.ClimateWidget
+import com.pawan.autovoice.presentation.components.MediaWidget
+import com.pawan.autovoice.presentation.components.VoiceHistoryWidget
 import com.pawan.autovoice.presentation.components.VoiceOrb
 import com.pawan.autovoice.presentation.theme.AutoVoiceTheme
 import com.pawan.autovoice.presentation.theme.CarDimens
@@ -74,29 +81,50 @@ internal fun DashboardContent(uiState: DashboardUiState, onIntent: (DashboardInt
             }
         },
     ) { innerPadding ->
-        // Landscape, split-screen layout mirroring a real center-stack head
-        // unit: primary controls (climate/media) on the left, the voice
-        // assistant orb — the single most important control — anchored on
-        // the right where it's reachable without the driver's eyes leaving
-        // the road-facing side of the display for long.
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 32.dp, vertical = 24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+                .padding(horizontal = 32.dp, vertical = 24.dp)
         ) {
-            ClimateWidget(state = uiState.climateState)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                // Left Column: Climate and Media
+                Column(verticalArrangement = Arrangement.spacedBy(CarDimens.MinTouchTargetSpacing)) {
+                    ClimateWidget(state = uiState.climateState)
+                    MediaWidget(
+                        state = uiState.nowPlaying,
+                        onTogglePlayback = { onIntent(DashboardIntent.ToggleMediaPlayback) }
+                    )
+                }
 
-            Box(modifier = Modifier.padding(start = CarDimens.MinTouchTargetSpacing), contentAlignment = Alignment.Center) {
-                VoiceOrb(
-                    sessionState = uiState.voiceSessionState,
-                    onTap = {
-//                        onIntent(DashboardIntent.SimulateVoiceCommand(utterance = "turn on the ac to 22"))
-                        onIntent(DashboardIntent.StartListening)
-                    },
-                )
+                // Right: Voice Orb
+                Box(
+                    modifier = Modifier.padding(start = CarDimens.MinTouchTargetSpacing),
+                    contentAlignment = Alignment.Center
+                ) {
+                    VoiceOrb(
+                        sessionState = uiState.voiceSessionState,
+                        onTap = {
+                            onIntent(DashboardIntent.StartListening)
+                        },
+                    )
+                }
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Bottom: Voice History
+            VoiceHistoryWidget(
+                history = uiState.voiceHistory,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)
+            )
         }
     }
 }
