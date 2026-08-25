@@ -29,6 +29,8 @@
         android:name="android.hardware.screen.landscape"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <application
         android:name=".AutoVoiceApplication"
         android:allowBackup="false"
@@ -36,7 +38,6 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AutoVoiceOS"
         tools:targetApi="35">
-        <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
         <!--
           MainActivity — the Compose-drawn, custom head-unit dashboard.

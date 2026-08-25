@@ -18,4 +18,4 @@ import dagger.hilt.android.HiltAndroidApp
  * whether the voice pipeline is ever used in a given session at all.
  */
 @HiltAndroidApp
-public class AutoVoiceApplication : Application()
+class AutoVoiceApplication : Application()
